@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css" />
+
+    <title>Weather App</title>
+</head>
+<body>
+
+    <div id="main-container">
+        <header>
+        
+            <div class="form-group">
+             
+              <input type="text" placeholder="Search city" name="city" id="city" />
+              <button type="submit" onclick="Validate()">
+                Enter
+              </button>
+              <br />
+              
+            </div>
+          
+        </header>
+        <div class="main-weather-display info">
+          <div class="general-info">
+            <p class="condition"id="condition">MOSTLY SUNNY</p>
+            <h1 class="location" id="location">GUANGZHOU, CHINA</h1>
+            <span class="degrees" id="degree">69</span>
+          </div>
+          <div class="weather-details info">
+            <p class="feels-like"id="feel">FEELS LIKE: 70</p>
+            <p class="wind-mph"id="wind">WIND: 5 MPH</p>
+            <p class="humidity"id="humidity">HUMIDITY: 69</p>
+            <img id="myImg" src="./images.jfif" width="107" height="98">
+
+
+          </div>
+        </div>
+
+      </div>
+    <script>
+    async function Validate() {
+    try{
+        var city = document.getElementById("city").value;
+      await fetch(
+         ` http://api.weatherstack.com/current?access_key=8a445f11d9cf22f4e894e4e33cedc418&query=${city}`
+         
+            ).then(res=>{return res.json()}).then(data=>display(data));
+            
+    }catch{
+      alert("please enter valid name...")
+      console.log("error");
+    }     
+            
+  
+      function  display(data){
+         const collection = document.getElementById("condition");
+         collection.innerHTML =data.current.weather_descriptions[0] ;
+         const collection1 = document.getElementById("location");
+         collection1.innerHTML =data.request.query;
+         const collection2 = document.getElementById("degree");
+        collection2.innerHTML =data.current.temperature;  
+        const collection3 = document.getElementById("feel");
+        collection3.innerHTML ="FEELS LIKE:"+data.current.feelslike;  
+         const collection4 = document.getElementById("wind");
+         collection4.innerHTML ="WIND:"+data.current.wind_speed+"mph";       
+         const collection5 = document.getElementById("humidity");
+         collection5.innerHTML ="HUMIDITY:"+data.current.humidity; 
+          
+          //data.current.weather_icons[0];  
+          document.getElementById("myImg").src = data.current.weather_icons[0]; 
+             
+              console.log(data);
+
+     }
+     
+    }
+       </script>
+</body>
+</html>
+
